@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+echo "starting ftp-server"
+&>/dev/null vsftpd /etc/vsftpd/vsftpd.conf
+
+#uncomment for debugging:
+#export TERM=xterm
+#watch -n 1 date

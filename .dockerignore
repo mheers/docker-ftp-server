@@ -1,0 +1,10 @@
+.dockerignore
+.vscode
+data
+data_old
+docker-compose*.yml
+Dockerfile
+testdata
+tmp
+vendor
+file-listener

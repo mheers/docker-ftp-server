@@ -1,0 +1,9 @@
+version: '2'
+services:
+  ftp-server:
+    environment:
+      - env=dev
+    volumes:
+      # - ./dockerimage/etc/vsftpd/vsftpd.conf:/etc/vsftpd/vsftpd.conf
+      # - ./dockerimage/etc/services.d/:/etc/services.d/
+      - ./dockerimage/etc/cont-init.d/:/etc/cont-init.d/

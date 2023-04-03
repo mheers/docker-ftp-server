@@ -1,0 +1,30 @@
+#!/command/with-contenv bash
+
+chown root /etc/vsftpd/vsftpd.conf
+
+# echo "adding user ${FTP_USER} with password ${FTP_PASSWORD}"
+# adduser --uid ${FTP_UID} --gecos GECOS --disabled-login --home /data/${FTP_HOME} -q --disabled-password ${FTP_USER}
+
+# #UPDATE PASSWORD
+# echo "updating password"
+# echo "${FTP_USER}:${FTP_PASSWORD}" | /usr/sbin/chpasswd
+
+# Create home dir and update vsftpd user db:
+mkdir -p "/data/${FTP_USER}"
+chown -R ftp:ftp /data/
+echo -e "${FTP_USER}\n${FTP_PASSWORD}" > /etc/vsftpd/virtual_users.txt
+/usr/bin/db_load -T -t hash -f /etc/vsftpd/virtual_users.txt /etc/vsftpd/virtual_users.db
+
+# Set passive mode parameters:
+if [ "$PASV_ADDRESS" = "**IPv4**" ]; then
+    export PASV_ADDRESS=$(/sbin/ip route|awk '/default/ { print $3 }')
+fi
+
+echo "Using PASV_ADDRESS=${PASV_ADDRESS}"
+
+echo "pasv_address=${PASV_ADDRESS}" >> /etc/vsftpd/vsftpd.conf
+echo "pasv_max_port=${PASV_MAX_PORT}" >> /etc/vsftpd/vsftpd.conf
+echo "pasv_min_port=${PASV_MIN_PORT}" >> /etc/vsftpd/vsftpd.conf
+echo "ssl_enable=${SSL_ENABLE}" >> /etc/vsftpd/vsftpd.conf
+
+touch /var/log/vsftpd.log

@@ -1,0 +1,21 @@
+version: '2'
+services:
+  ftp-server:
+    image: ftp-server
+    build: ./
+    container_name: ftp-server
+    environment:
+      - FTP_USER=${FTP_USER}
+      - FTP_PASSWORD=${FTP_PASSWORD}
+      - PASV_ADDRESS=${PASV_ADDRESS}
+      - PASV_MAX_PORT=${PASV_MAX_PORT}
+      - PASV_MIN_PORT=${PASV_MIN_PORT}
+      - SSL_ENABLE=${SSL_ENABLE}
+    ports:
+      - 0.0.0.0:20:20
+      - 0.0.0.0:21:21
+      - 21100-21110:21100-21110
+    volumes:
+      - ./data/:/data
+      # - :/etc/vsftpd/ssl/ssl-cert.pem:ro
+      # - :/etc/vsftpd/ssl/ssl-cert.key:ro
